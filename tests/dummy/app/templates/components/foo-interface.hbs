@@ -1,0 +1,13 @@
+<ul data-test={{hook "foos"}}>
+  {{#each foos as |foo|}}
+    <li data-test={{hook "bar"}}>{{foo.bar}}</li>
+  {{/each}}
+</ul>
+
+<button {{action "createRecord"}} data-test={{hook "createRecord"}}>Create Record</button>
+<button {{action "updateRecord"}} data-test={{hook "updateRecord"}}>Update Record</button>
+<button {{action "findRecord"}} data-test={{hook "findRecord"}}>Find Record</button>
+<button {{action "findAll"}} data-test={{hook "findAll"}}>Find All</button>
+<button {{action "queryRecord"}} data-test={{hook "queryRecord"}}>Query Record</button>
+<button {{action "query"}} data-test={{hook "query"}}>Query</button>
+<button {{action "deleteRecord"}} data-test={{hook "deleteRecord"}}>Delete Record</button>
