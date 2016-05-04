@@ -43,7 +43,9 @@
     "ember-addon"
   ],
   "dependencies": {
-    "ember-cli-babel": "^5.1.6"
+    "broccoli-static-compiler": "^0.2.2",
+    "ember-cli-babel": "^5.1.6",
+    "lokijs": "^1.3.16"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
