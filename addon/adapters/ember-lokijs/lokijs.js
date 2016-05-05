@@ -3,7 +3,10 @@ import Ember from 'ember';
 
 const {
   isPresent,
-  on
+  get,
+  getProperties,
+  on,
+  set
 } = Ember;
 
 const { Adapter } = DS;
@@ -17,7 +20,7 @@ export default Adapter.extend({
 
     db.loadDatabase();
 
-    this.set('db', db);
+    set(this, 'db', db);
   }),
 
   createRecord(store, type, snapshot) {
@@ -87,7 +90,7 @@ export default Adapter.extend({
     const {
       db,
       indices
-    } = this.getProperties('db', 'indices');
+    } = getProperties(this, 'db', 'indices');
 
     let collection = db.getCollection(type.modelName);
 
@@ -107,6 +110,9 @@ export default Adapter.extend({
   },
 
   _saveDatabase() {
-    this.get('db').saveDatabase();
+    const db = get(this, 'db');
+
+    db.saveDatabase();
+    db.loadDatabase();
   }
 });
