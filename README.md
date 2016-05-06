@@ -54,3 +54,16 @@
    indices: ['username', 'email']
  });
  ```
+
+### `databaseName`
+
+By default, the adapter will place all models in the same database named `ember-lokijs`. If you wish to place them in separate databases, simply provide your adapters with unique `databaseName`:
+
+ ```js
+ // adapters/user.js
+ import { LokiJSAdapter } from 'ember-lokijs';
+
+ export default LokiJSAdapter.extend({
+   databaseName: 'user-db'
+ });
+ ```

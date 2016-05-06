@@ -14,9 +14,10 @@ const { RSVP: { resolve } } = Ember;
 
 export default Adapter.extend({
   indices: [],
+  databaseName: 'ember-lokijs',
 
   initializeDb: on('init', function() {
-    const db = new loki('ember-lokijs');
+    const db = new loki(this.databaseName);
 
     db.loadDatabase();
 
