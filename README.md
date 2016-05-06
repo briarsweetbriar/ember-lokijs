@@ -1,26 +1,56 @@
-# Ember-lokijs
+[![npm version](https://badge.fury.io/js/ember-lokijs.svg)](https://badge.fury.io/js/ember-lokijs)
+[![Build Status](https://travis-ci.org/null-null-null/ember-lokijs.svg?branch=master)](https://travis-ci.org/null-null-null/ember-lokijs)
 
-This README outlines the details of collaborating on this Ember addon.
+# ember-lokijs
+
+[LokiJS](https://github.com/techfort/LokiJS) is a highly performant localStorage/sessionStorage/indexedDB interface. This addon wraps Loki and also provides an extensible adapter and serializer so you can easily use it with Ember Data models.
 
 ## Installation
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+`ember install ember-lokijs`
 
-## Running
+## Usage
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+ First, add the `LokiJSModelMixin` to your model:
 
-## Running Tests
+ ```js
+ // models/foo.js
+ import DS from 'ember-data';
+ import { LokiJSModelMixin } from 'ember-lokijs';
 
-* `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+ export default DS.Model.extend(LokiJSModelMixin, {
+ });
+ ```
 
-## Building
+ Next, extend a `LokiJSAdapter` for your model:
 
-* `ember build`
+ ```js
+ // adapters/foos.js
+ import { LokiJSAdapter } from 'ember-lokijs';
 
-For more information on using ember-cli, visit [http://ember-cli.com/](http://ember-cli.com/).
+ export default LokiJSAdapter;
+ ```
+
+ Finally, extend a `LokiJSSerializer` for your model:
+
+ ```js
+ // serializer/foos.js
+ import { LokiJSSerializer } from 'ember-lokijs';
+
+ export default LokiJSSerializer;
+ ```
+
+ And that's it!
+
+ ### `indices`
+
+ If you want a particular query to be faster, you can index its attributes in your adapter:
+
+ ```js
+ // adapters/user.js
+ import { LokiJSAdapter } from 'ember-lokijs';
+
+ export default LokiJSAdapter.extend({
+   indices: ['username', 'email']
+ });
+ ```

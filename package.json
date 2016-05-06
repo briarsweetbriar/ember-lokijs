@@ -1,7 +1,7 @@
 {
   "name": "ember-lokijs",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.0.1",
+  "description": "An Ember adapter for the high-performance localStorage interface, LokiJS.",
   "directories": {
     "doc": "doc",
     "test": "tests"
