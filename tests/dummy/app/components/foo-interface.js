@@ -52,11 +52,7 @@ export default Component.extend({
     },
 
     deleteRecord() {
-      get(this, 'store').findAll('foo').then((foos) => {
-        const foo = get(foos, 'lastObject');
-
-        foo.destroyRecord();
-      });
+      get(this, 'foos.firstObject').destroyRecord();
     }
   }
 });

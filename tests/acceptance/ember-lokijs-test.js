@@ -20,7 +20,7 @@ moduleForAcceptance('Acceptance | ember lokijs', {
 });
 
 test('visiting /ember-lokijs', function(assert) {
-  assert.expect(12);
+  assert.expect(14);
 
   visit('/');
 
@@ -117,18 +117,18 @@ test('visiting /ember-lokijs', function(assert) {
     assert.deepEqual(bars.map(getText).toArray(), ['0', '0'], 'query retrieves the records based on their values');
   });
 
-  // andThen(() => {
-  //   click(hook('deleteRecord'));
-  // });
-  //
-  // andThen(() => {
-  //   db.loadDatabase();
-  // });
-  //
-  // andThen(() => {
-  //   const foos = db.getCollection('foo').data;
-  //
-  //   assert.equal(foos.length, 2, 'deleteRecord deleted the foo');
-  //   assert.deepEqual(foos.map((foo) => foo.bar), [2, 0], 'remaining foos are untouched');
-  // });
+  andThen(() => {
+    click(hook('deleteRecord'));
+  });
+
+  andThen(() => {
+    db.loadDatabase();
+  });
+
+  andThen(() => {
+    const foos = db.getCollection('foo').data;
+
+    assert.equal(foos.length, 2, 'deleteRecord deleted the foo');
+    assert.deepEqual(foos.map((foo) => foo.bar), [2, 0], 'remaining foos are untouched');
+  });
 });
