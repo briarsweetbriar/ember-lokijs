@@ -5,7 +5,6 @@ const {
   isPresent,
   get,
   getProperties,
-  on,
   set
 } = Ember;
 
@@ -16,13 +15,15 @@ export default Adapter.extend({
   indices: [],
   databaseName: 'ember-lokijs',
 
-  initializeDb: on('init', function() {
+  init() {
     const db = new loki(this.databaseName);
 
     db.loadDatabase();
 
     set(this, 'db', db);
-  }),
+
+    this._super();
+  },
 
   createRecord(store, type, snapshot) {
     const serializedData = store.serializerFor(type.modelName).serialize(snapshot);
