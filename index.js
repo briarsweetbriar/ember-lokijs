@@ -4,6 +4,14 @@
 var path = require('path');
 var pickFiles = require('broccoli-static-compiler');
 
+function getParentApp(app) {
+  if (typeof app.import !== 'function' && app.app) {
+    return getParentApp(app.app);
+  } else {
+    return app;
+  }
+}
+
 module.exports = {
   name: 'ember-lokijs',
 
@@ -17,6 +25,9 @@ module.exports = {
 
   included: function(app) {
     this._super.included(app);
+
+    app = getParentApp(app);
+
     app.import('vendor/lokijs/lokijs.js');
     app.import('vendor/lokijs/loki-indexed-adapter.js');
   }
