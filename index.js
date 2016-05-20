@@ -30,5 +30,9 @@ module.exports = {
 
     app.import('vendor/lokijs/lokijs.js');
     app.import('vendor/lokijs/loki-indexed-adapter.js');
+  },
+
+  safeIncluded: function(app, parent) {
+    this.included(app, parent);
   }
 };
