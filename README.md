@@ -11,59 +11,88 @@
 
 ## Usage
 
- First, add the `LokiJSModelMixin` to your model:
+First, add the `LokiJSModelMixin` to your model:
 
- ```js
- // models/foo.js
- import DS from 'ember-data';
- import { LokiJSModelMixin } from 'ember-lokijs';
+```js
+// models/foo.js
+import DS from 'ember-data';
+import { LokiJSModelMixin } from 'ember-lokijs';
 
- export default DS.Model.extend(LokiJSModelMixin, {
- });
- ```
+export default DS.Model.extend(LokiJSModelMixin, {
+});
+```
 
- Next, extend a `LokiJSAdapter` for your model:
+Next, extend a `LokiJSAdapter` for your model:
 
- ```js
- // adapters/foos.js
- import { LokiJSAdapter } from 'ember-lokijs';
+```js
+// adapters/foos.js
+import { LokiJSAdapter } from 'ember-lokijs';
 
- export default LokiJSAdapter;
- ```
+export default LokiJSAdapter;
+```
 
- Finally, extend a `LokiJSSerializer` for your model:
+Finally, extend a `LokiJSSerializer` for your model:
 
- ```js
- // serializer/foos.js
- import { LokiJSSerializer } from 'ember-lokijs';
+```js
+// serializer/foos.js
+import { LokiJSSerializer } from 'ember-lokijs';
 
- export default LokiJSSerializer;
- ```
+export default LokiJSSerializer;
+```
 
- And that's it!
+And that's it!
 
- ### `indices`
+### `indices`
 
- If you want a particular query to be faster, you can index its attributes in your adapter:
+If you want a particular query to be faster, you can index its attributes in your adapter:
 
- ```js
- // adapters/user.js
- import { LokiJSAdapter } from 'ember-lokijs';
+```js
+// adapters/user.js
+import { LokiJSAdapter } from 'ember-lokijs';
 
- export default LokiJSAdapter.extend({
-   indices: ['username', 'email']
- });
- ```
+export default LokiJSAdapter.extend({
+  indices: ['username', 'email']
+});
+```
 
 ### `databaseName`
 
 By default, the adapter will place all models in the same database named `ember-lokijs`. If you wish to place them in separate databases, simply provide your adapters with unique `databaseName`:
 
- ```js
- // adapters/user.js
- import { LokiJSAdapter } from 'ember-lokijs';
+```js
+// adapters/user.js
+import { LokiJSAdapter } from 'ember-lokijs';
 
- export default LokiJSAdapter.extend({
-   databaseName: 'user-db'
- });
- ```
+export default LokiJSAdapter.extend({
+  databaseName: 'user-db'
+});
+```
+
+### `Adapter`
+
+If you want to use a lokijs adapter other than the default, you can specify it:
+
+```js
+// adapters/user.js
+import { LokiJSAdapter } from 'ember-lokijs';
+
+export default LokiJSAdapter.extend({
+  Adapter: LokiIndexedAdapter
+});
+```
+
+### `adapterOptions`
+
+If you specify a custom lokijs adapter, you can also pass in options:
+
+```js
+// adapters/user.js
+import { LokiJSAdapter } from 'ember-lokijs';
+
+export default LokiJSAdapter.extend({
+  Adapter: LokiCordovaFSAdapter,
+  adapterOptions: {
+    prefix: 'loki'
+  }
+});
+```
