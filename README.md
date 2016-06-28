@@ -68,31 +68,18 @@ export default LokiJSAdapter.extend({
 });
 ```
 
-### `Adapter`
+### `lokiOptions`
 
-If you want to use a lokijs adapter other than the default, you can specify it:
-
-```js
-// adapters/user.js
-import { LokiJSAdapter } from 'ember-lokijs';
-
-export default LokiJSAdapter.extend({
-  Adapter: LokiIndexedAdapter
-});
-```
-
-### `adapterOptions`
-
-If you specify a custom lokijs adapter, you can also pass in options:
+If you want to pass in options to the lokijs constructor, you can specify them:
 
 ```js
 // adapters/user.js
 import { LokiJSAdapter } from 'ember-lokijs';
 
 export default LokiJSAdapter.extend({
-  Adapter: LokiCordovaFSAdapter,
-  adapterOptions: {
-    prefix: 'loki'
+  lokiOptions: {
+    adapter: new LokiIndexedAdapter(),
+    autosave: true
   }
 });
 ```

@@ -12,34 +12,18 @@ const { Adapter } = DS;
 const { RSVP: { resolve } } = Ember;
 
 export default Adapter.extend({
-  Adapter: undefined,
-  adapterOptions: {},
   databaseName: 'ember-lokijs',
   indices: [],
+  lokiOptions: {},
 
   init() {
-    const db = this._generateDB();
+    const db = new loki(get(this, 'databaseName'), get(this, 'lokiOptions'));
 
     db.loadDatabase();
 
     set(this, 'db', db);
 
     this._super();
-  },
-
-  _generateDB() {
-    return isPresent(get(this, 'Adapter')) ? this._generateDBWithAdapter() : this._generateDBWithoutAdapter();
-  },
-
-  _generateDBWithAdapter() {
-    const { Adapter, adapterOptions, databaseName } = getProperties(this, 'Adapter', 'adapterOptions', 'databaseName');
-    const adapter = new Adapter(adapterOptions);
-
-    return new loki(databaseName, { adapter });
-  },
-
-  _generateDBWithoutAdapter() {
-    return new loki(get(this, 'databaseName'));
   },
 
   createRecord(store, type, snapshot) {
