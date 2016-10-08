@@ -1,6 +1,6 @@
 {
   "name": "ember-lokijs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "An Ember adapter for the high-performance localStorage interface, LokiJS.",
   "directories": {
     "doc": "doc",

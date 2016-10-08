@@ -4,12 +4,16 @@
 var path = require('path');
 var pickFiles = require('broccoli-static-compiler');
 
-function getParentApp(app) {
-  if (typeof app.import !== 'function' && app.app) {
-    return getParentApp(app.app);
-  } else {
-    return app;
-  }
+function findRoot(current) {
+  var app;
+
+  // Keep iterating upward until we don't have a grandparent.
+  // Has to do this grandparent check because at some point we hit the project.
+  do {
+    app = current.app || app;
+  } while (current.parent && current.parent.parent && (current = current.parent));
+
+  return app;
 }
 
 module.exports = {
@@ -23,16 +27,12 @@ module.exports = {
     });
   },
 
-  included: function(app) {
-    this._super.included(app);
-
-    app = getParentApp(app);
+  treeForAddon: function(app) {
+    var app = findRoot(this);
 
     app.import('vendor/lokijs/lokijs.js');
     app.import('vendor/lokijs/loki-indexed-adapter.js');
-  },
 
-  safeIncluded: function(app, parent) {
-    this.included(app, parent);
+    return this._super.treeForAddon.apply(this, arguments);
   }
 };
