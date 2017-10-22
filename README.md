@@ -1,5 +1,5 @@
 [![npm version](https://badge.fury.io/js/ember-lokijs.svg)](https://badge.fury.io/js/ember-lokijs)
-[![Build Status](https://travis-ci.org/null-null-null/ember-lokijs.svg?branch=master)](https://travis-ci.org/null-null-null/ember-lokijs)
+[![Build Status](https://travis-ci.org/patience-tema-baron/ember-lokijs.svg?branch=master)](https://travis-ci.org/patience-tema-baron/ember-lokijs)
 
 # ember-lokijs
 

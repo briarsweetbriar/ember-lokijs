@@ -1,6 +1,6 @@
 {
   "name": "ember-lokijs",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "An Ember adapter for the high-performance localStorage interface, LokiJS.",
   "keywords": [
     "ember-addon"
@@ -11,7 +11,7 @@
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "https://github.com/null-null-null/ember-lokijs",
+  "repository": "https://github.com/patience-tema-baron/ember-lokijs",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
