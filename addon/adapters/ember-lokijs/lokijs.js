@@ -2,14 +2,13 @@ import DS from 'ember-data';
 import Ember from 'ember';
 
 const {
-  isPresent,
   get,
   getProperties,
   set
 } = Ember;
 
 const { Adapter } = DS;
-const { RSVP: { resolve } } = Ember;
+const { RSVP: { Promise, resolve } } = Ember;
 
 export default Adapter.extend({
   databaseName: 'ember-lokijs',
@@ -19,7 +18,12 @@ export default Adapter.extend({
   init() {
     const db = new loki(get(this, 'databaseName'), get(this, 'lokiOptions'));
 
-    db.loadDatabase();
+    set(this, '_dbLoadPromise', new Promise((_resolve) => {
+      db.loadDatabase({}, () => {
+        set(this, '_dbLoaded', true);
+        _resolve();
+      });
+    }));
 
     set(this, 'db', db);
 
@@ -27,54 +31,60 @@ export default Adapter.extend({
   },
 
   createRecord(store, type, snapshot) {
-    const serializedData = store.serializerFor(type.modelName).serialize(snapshot);
-    const record = this._findOrAddCollection(type).insert(serializedData);
+    return this._promiseWrap(() => {
+      const record = this._findOrAddCollection(type).insert(store.serializerFor(type.modelName).serialize(snapshot));
 
-    this._saveDatabase();
+      this._saveDatabase();
 
-    return this._promiseWrap(record);
+      return record;
+    });
   },
 
   updateRecord(store, type, snapshot) {
-    const serializedData = store.serializerFor(type.modelName).serialize(snapshot);
-    const record = this._findOrAddCollection(type).update(serializedData);
+    return this._promiseWrap(() => {
+      const record = this._findOrAddCollection(type).update(store.serializerFor(type.modelName).serialize(snapshot));
 
-    this._saveDatabase();
+      this._saveDatabase();
 
-    return this._promiseWrap(record);
+      return record;
+    });
   },
 
   deleteRecord(store, type, snapshot) {
-    const serializedData = store.serializerFor(type.modelName).serialize(snapshot);
+    return this._promiseWrap(() => {
+      const serializedData = store.serializerFor(type.modelName).serialize(snapshot);
+      const collection = this._findOrAddCollection(type);
+      const record = collection.get(snapshot.id);
 
-    this._findOrAddCollection(type).remove(serializedData);
-    this._saveDatabase();
+      collection.remove(serializedData);
+      this._saveDatabase();
 
-    return resolve(null);
+      return record;
+    });
   },
 
   findAll(store, type) {
-    const collection = this._findOrAddCollection(type).find();
-
-    return this._promiseWrap(collection);
+    return this._promiseWrap(() => {
+      return this._findOrAddCollection(type).find();
+    });
   },
 
   findRecord(store, type, id) {
-    const record = this._findOrAddCollection(type).get(id);
-
-    return this._promiseWrap(record);
+    return this._promiseWrap(() => {
+      return this._findOrAddCollection(type).get(id);
+    });
   },
 
   query(store, type, query) {
-    const collection = this._findOrAddCollection(type).find(this._queryConstructor(query));
-
-    return this._promiseWrap(collection);
+    return this._promiseWrap(() => {
+      return this._findOrAddCollection(type).find(this._queryConstructor(query));
+    });
   },
 
   queryRecord(store, type, query) {
-    const record = this._findOrAddCollection(type).findOne(this._queryConstructor(query));
-
-    return this._promiseWrap(record);
+    return this._promiseWrap(() => {
+      return this._findOrAddCollection(type).findOne(this._queryConstructor(query));
+    });
   },
 
   _queryConstructor(query) {
@@ -106,10 +116,16 @@ export default Adapter.extend({
     return collection;
   },
 
-  _promiseWrap(records) {
-    const data = isPresent(records) ? records : [];
-
-    return resolve(data);
+  _promiseWrap(cb) {
+    if (get(this, '_dbLoaded')) {
+      return resolve(cb() || []);
+    } else {
+      return new Promise((_resolve) => {
+        get(this, '_dbLoadPromise').then(() => {
+          _resolve(cb() || []);
+        });
+      });
+    }
   },
 
   _saveDatabase() {
